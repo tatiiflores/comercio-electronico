@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}{% if object %}Editar Producto{% else %}Nuevo Producto{% endif %}{% endblock %}
+{% block content %}
+<h2>{% if object %}Editar Producto{% else %}Nuevo Producto{% endif %}</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <h4>Imágenes adicionales</h4>
+    {{ imagenes.management_form }}
+    <div id="formset-container">
+        {% for form_img in imagenes %}
+        <div class="row mb-2 formset-row">
+            <div class="col-md-6">{{ form_img.imagen.label_tag }} {{ form_img.imagen }}</div>
+            <div class="col-md-3">{{ form_img.orden.label_tag }} {{ form_img.orden }}</div>
+            {% if form_img.instance.pk and form_img.DELETE %}
+            <div class="col-md-3">{{ form_img.DELETE }} Eliminar</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="{% url 'producto_list_gest' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
