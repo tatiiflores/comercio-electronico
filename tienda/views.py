@@ -114,3 +114,45 @@ class ProductoCreateView(LoginRequiredMixin, CreateView):
         else:
             data['imagenes'] = ImagenProductoFormSet(instance=self.object)
         return data
+
+class ProductoUpdateView(LoginRequiredMixin, UpdateView):
+    model = Producto
+    form_class = ProductoForm
+    template_name = 'tienda/producto_form.html'
+    success_url = reverse_lazy('producto_list_gest')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data['imagenes'] = ImagenProductoFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        else:
+            data['imagenes'] = ImagenProductoFormSet(instance=self.object)
+        return data
+
+class ProductoDeleteView(LoginRequiredMixin, DeleteView):
+    model = Producto
+    template_name = 'tienda/producto_confirm_delete.html'
+    success_url = reverse_lazy('producto_list_gest')
+
+class VentaListView(LoginRequiredMixin, ListView):
+    model = Venta
+    template_name = 'tienda/venta_list.html'
+    context_object_name = 'ventas'
+class VentaCreateView(LoginRequiredMixin, CreateView):
+    model = Venta
+    form_class = VentaForm
+    template_name = 'tienda/venta_form.html'
+    success_url = reverse_lazy('venta_list')
+class VentaUpdateView(LoginRequiredMixin, UpdateView):
+    model = Venta
+    form_class = VentaForm
+    template_name = 'tienda/venta_form.html'
+    success_url = reverse_lazy('venta_list')
+class VentaDeleteView(LoginRequiredMixin, DeleteView):
+    model = Venta
+    template_name = 'tienda/venta_confirm_delete.html'
+    success_url = reverse_lazy('venta_list')
+class VentaDetailView(LoginRequiredMixin, DetailView):
+    model = Venta
+    template_name = 'tienda/venta_detail.html'
+    context_object_name = 'venta'
