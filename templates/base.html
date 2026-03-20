@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TechStore{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'index' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="TechStore" height="40">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'productos' %}">Productos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'acercade' %}">Acerca de</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'contacto' %}">Contacto</a></li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                Gestión
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'cliente_list' %}">Clientes</a></li>
+                                <li><a class="dropdown-item" href="{% url 'proveedor_list' %}">Proveedores</a></li>
+                                <li><a class="dropdown-item" href="{% url 'producto_list_gest' %}">Productos</a></li>
+                                <li><a class="dropdown-item" href="{% url 'venta_list' %}">Ventas</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesión</a></li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Iniciar sesión</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-4">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p>&copy; 2025 TechStore - Todos los derechos reservados.</p>
+        <p>Email: info@techstore.com | Tel: +123 456 789</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

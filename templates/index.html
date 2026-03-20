@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}TechStore - Inicio{% endblock %}
+{% block content %}
+<div class="text-center">
+    <h1 class="display-4">Bienvenido a TechStore</h1>
+    <p class="lead">Tu tienda de tecnología con los mejores precios</p>
+    <img src="{% static 'images/banner.jpg' %}" class="img-fluid rounded" alt="Banner">
+</div>
+
+<section class="row mt-5">
+    <h2 class="text-center mb-4">Ofertas destacadas</h2>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <img src="{% static 'images/oferta1.jpg' %}" class="card-img-top" alt="Oferta 1">
+            <div class="card-body">
+                <h5 class="card-title">Notebook Gamer</h5>
+                <p class="card-text">Potente notebook con RTX 3060. 20% de descuento.</p>
+                <a href="{% url 'productos' %}" class="btn btn-primary">Ver más</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <img src="{% static 'images/oferta2.jpg' %}" class="card-img-top" alt="Oferta 2">
+            <div class="card-body">
+                <h5 class="card-title">Mouse Inalámbrico</h5>
+                <p class="card-text">Ergonómico y preciso. 2x1 en compras online.</p>
+                <a href="{% url 'productos' %}" class="btn btn-primary">Ver más</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <img src="{% static 'images/oferta3.jpg' %}" class="card-img-top" alt="Oferta 3">
+            <div class="card-body">
+                <h5 class="card-title">Monitor 4K</h5>
+                <p class="card-text">Diseño ultradelgado, ideal para diseñadores.</p>
+                <a href="{% url 'productos' %}" class="btn btn-primary">Ver más</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
