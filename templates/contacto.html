@@ -2,30 +2,30 @@
 {% load static %}
 {% block title %}TechStore - Contacto{% endblock %}
 {% block content %}
-<h2>Contacto</h2>
+<h2><i class="bi bi-telephone"></i> Contacto</h2>
 <div class="row">
     <div class="col-md-6">
-        <p><strong>Teléfono:</strong> +123 456 789</p>
-        <p><strong>Email:</strong> info@techstore.com</p>
-        <p><strong>Dirección:</strong> Av. Tecnológica 123, Buenos Aires, Argentina</p>
-        <p><strong>Horario:</strong> Lunes a Viernes de 9:00 a 18:00</p>
+        <p><i class="bi bi-telephone-fill"></i> <strong>Teléfono:</strong> +123 456 789</p>
+        <p><i class="bi bi-envelope-fill"></i> <strong>Email:</strong> info@techstore.com</p>
+        <p><i class="bi bi-geo-alt-fill"></i> <strong>Dirección:</strong> Av. Tecnológica 123, Buenos Aires, Argentina</p>
+        <p><i class="bi bi-clock-fill"></i> <strong>Horario:</strong> Lunes a Viernes de 9:00 a 18:00</p>
     </div>
     <div class="col-md-6">
         <form method="post">
             {% csrf_token %}
             <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
+                <label for="nombre" class="form-label"><i class="bi bi-person"></i> Nombre</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" required>
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
+                <label for="email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
                 <input type="email" class="form-control" id="email" name="email" required>
             </div>
             <div class="mb-3">
-                <label for="mensaje" class="form-label">Mensaje</label>
+                <label for="mensaje" class="form-label"><i class="bi bi-chat-dots"></i> Mensaje</label>
                 <textarea class="form-control" id="mensaje" name="mensaje" rows="4" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-send"></i> Enviar mensaje</button>
         </form>
     </div>
 </div>

@@ -1,3 +1,19 @@
-<h1>Detalle de Venta</h1>
+{% extends 'base.html' %}
+{% block title %}Detalle de Venta{% endblock %}
+{% block content %}
+<h2><i class="bi bi-receipt"></i> Detalle de Venta</h2>
 
-<p>{{ venta }}</p>
+<div class="card">
+    <div class="card-body">
+        <p><strong><i class="bi bi-person-circle"></i> Cliente:</strong> {{ venta.cliente }}</p>
+        <p><strong><i class="bi bi-box-seam"></i> Producto:</strong> {{ venta.producto }}</p>
+        <p><strong><i class="bi bi-box2-heart"></i> Cantidad:</strong> {{ venta.cantidad }}</p>
+        <p><strong><i class="bi bi-calendar-event"></i> Fecha:</strong> {{ venta.fecha }}</p>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="{% url 'venta_update' venta.pk %}" class="btn btn-warning"><i class="bi bi-pencil"></i> Editar</a>
+    <a href="{% url 'venta_list' %}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+</div>
+{% endblock %}
