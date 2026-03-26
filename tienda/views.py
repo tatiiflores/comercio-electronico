@@ -3,8 +3,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.db.models import Q
+from django.contrib import messages
+from decimal import Decimal
 from .models import Cliente, Proveedor, Producto, Venta, ImagenProducto
-from .forms import ClienteForm, ProveedorForm, ProductoForm, VentaForm, ImagenProductoFormSet
+from .forms import ClienteForm, ProveedorForm, ProductoForm, VentaForm, ImagenProductoFormSet, CheckoutForm
 
 # Vistas públicas (Sprint 1 y 2)
 def index(request):
@@ -24,6 +26,130 @@ class ProductoListView(ListView):
 
     def get_queryset(self):
         return Producto.objects.prefetch_related('imagenes').all()
+
+
+def _cart_items(request):
+    cart = request.session.get('cart', {})
+    items = []
+    total = Decimal('0.00')
+    for pid_str, data in cart.items():
+        try:
+            producto = Producto.objects.get(pk=int(pid_str))
+        except (Producto.DoesNotExist, ValueError):
+            continue
+        cantidad = data.get('quantity', 0)
+        subtotal = producto.precio * cantidad
+        items.append({
+            'producto': producto,
+            'quantity': cantidad,
+            'precio': producto.precio,
+            'subtotal': subtotal,
+        })
+        total += subtotal
+    return items, total
+
+
+def add_to_cart(request, producto_id):
+    producto = get_object_or_404(Producto, pk=producto_id)
+    if request.method == 'POST':
+        try:
+            cantidad = int(request.POST.get('quantity', 1))
+        except ValueError:
+            cantidad = 1
+        if cantidad < 1:
+            cantidad = 1
+        cart = request.session.get('cart', {})
+        key = str(producto_id)
+        cart[key] = {'quantity': cart.get(key, {}).get('quantity', 0) + cantidad}
+        request.session['cart'] = cart
+        messages.success(request, f'Agregaste {cantidad} unidad(es) de {producto.nombre} al carrito.')
+    return redirect('productos')
+
+
+def remove_from_cart(request, producto_id):
+    cart = request.session.get('cart', {})
+    key = str(producto_id)
+    if key in cart:
+        del cart[key]
+        request.session['cart'] = cart
+        messages.success(request, 'Producto eliminado del carrito.')
+    return redirect('carrito')
+
+
+def update_cart(request, producto_id):
+    if request.method == 'POST':
+        try:
+            cantidad = int(request.POST.get('quantity', 1))
+        except ValueError:
+            cantidad = 1
+        cart = request.session.get('cart', {})
+        key = str(producto_id)
+        if cantidad > 0:
+            if key in cart:
+                cart[key]['quantity'] = cantidad
+                request.session['cart'] = cart
+                messages.success(request, 'Cantidad actualizada.')
+        else:
+            if key in cart:
+                del cart[key]
+                request.session['cart'] = cart
+                messages.warning(request, 'Producto eliminado porque la cantidad se puso en 0.')
+    return redirect('carrito')
+
+
+def carrito(request):
+    items, total = _cart_items(request)
+    if items:
+        descripcion = ', '.join(f"{item['quantity']} {item['producto'].nombre}" for item in items)
+        resumen_texto = f"Estás comprando {descripcion}. Total: ${total:.2f}"
+    else:
+        resumen_texto = 'Tu carrito está vacío.'
+    return render(request, 'carrito.html', {
+        'items': items,
+        'total': total,
+        'resumen_texto': resumen_texto,
+    })
+
+
+def checkout(request):
+    items, total = _cart_items(request)
+    if not items:
+        messages.warning(request, 'El carrito está vacío. Agrega productos antes de iniciar el checkout.')
+        return redirect('productos')
+
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            request.session['checkout_data'] = form.cleaned_data
+            return redirect('checkout_success')
+    else:
+        checkout_data = request.session.get('checkout_data', {})
+        form = CheckoutForm(initial=checkout_data)
+
+    return render(request, 'checkout.html', {
+        'items': items,
+        'total': total,
+        'form': form,
+    })
+
+
+def checkout_success(request):
+    items, total = _cart_items(request)
+    checkout_data = request.session.get('checkout_data')
+
+    if not checkout_data or not items:
+        messages.warning(request, 'No hay información de checkout o el carrito está vacío.')
+        return redirect('productos')
+
+    # Guardar venta en la base de datos (opcional básico)
+    # se podría crear Cliente/Venta aquí si ya se requiere persistencia.
+    request.session['cart'] = {}
+
+    return render(request, 'checkout_success.html', {
+        'items': items,
+        'total': total,
+        'checkout_data': checkout_data,
+    })
 
 # Vistas de gestión (Sprint 3) con LoginRequiredMixin
 class ClienteListView(LoginRequiredMixin, ListView):

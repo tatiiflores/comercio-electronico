@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Carrito de compras{% endblock %}
+{% block content %}
+<h2 class="mb-4">Carrito de compras</h2>
+
+{% if items %}
+<div class="table-responsive">
+    <table class="table table-bordered align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio unidad</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.producto.nombre }}</td>
+                <td>
+                    <form method="post" action="{% url 'update_cart' item.producto.id %}" class="d-flex gap-2 align-items-center">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" min="1" value="{{ item.quantity }}" class="form-control form-control-sm" style="max-width: 80px;" />
+                        <button class="btn btn-sm btn-outline-primary" type="submit">Actualizar</button>
+                    </form>
+                </td>
+                <td>${{ item.precio }}</td>
+                <td>${{ item.subtotal }}</td>
+                <td>
+                    <form method="post" action="{% url 'remove_from_cart' item.producto.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-danger">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end"><strong>Total general:</strong></td>
+                <td colspan="2"><strong>${{ total }}</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<p class="alert alert-info">{{ resumen_texto }}</p>
+<a href="{% url 'checkout' %}" class="btn btn-success">Ir al checkout</a>
+<a href="{% url 'productos' %}" class="btn btn-secondary ms-2">Seguir comprando</a>
+{% else %}
+<p class="alert alert-warning">Tu carrito está vacío.</p>
+<a href="{% url 'productos' %}" class="btn btn-primary">Ver productos</a>
+{% endif %}
+{% endblock %}

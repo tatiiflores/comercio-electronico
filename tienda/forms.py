@@ -57,3 +57,38 @@ class VentaForm(forms.ModelForm):
             'producto': forms.Select(attrs={'class': 'form-select'}),
             'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
         }
+
+
+class CheckoutForm(forms.Form):
+    PAISES = [
+        ('Argentina', 'Argentina'),
+        ('Uruguay', 'Uruguay'),
+        ('Chile', 'Chile'),
+        ('Brasil', 'Brasil'),
+    ]
+
+    PROVINCIAS_ARGENTINAS = [
+        ('Buenos Aires', 'Buenos Aires'),
+        ('Córdoba', 'Córdoba'),
+        ('Santa Fe', 'Santa Fe'),
+        ('Mendoza', 'Mendoza'),
+        ('Tucumán', 'Tucumán'),
+        ('Salta', 'Salta'),
+        ('Jujuy', 'Jujuy'),
+        ('Misiones', 'Misiones'),
+        ('Entre Ríos', 'Entre Ríos'),
+        ('Corrientes', 'Corrientes'),
+        ('San Juan', 'San Juan'),
+        ('San Luis', 'San Luis'),
+        ('La Pampa', 'La Pampa'),
+        ('Neuquén', 'Neuquén'),
+        ('Río Negro', 'Río Negro'),
+        ('Chubut', 'Chubut'),
+        ('Santa Cruz', 'Santa Cruz'),
+        ('Tierra del Fuego', 'Tierra del Fuego'),
+    ]
+
+    pais = forms.ChoiceField(choices=PAISES, initial='Argentina', widget=forms.Select(attrs={'class': 'form-select'}))
+    provincia = forms.ChoiceField(choices=PROVINCIAS_ARGENTINAS, widget=forms.Select(attrs={'class': 'form-select'}))
+    ciudad = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    direccion = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control'}))

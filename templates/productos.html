@@ -12,6 +12,13 @@
                 <h5 class="card-title">{{ producto.nombre }}</h5>
                 <p class="card-text">{{ producto.descripcion|truncatechars:80 }}</p>
                 <p class="fw-bold text-primary mt-auto"><i class="bi bi-tag"></i> ${{ producto.precio }}</p>
+                <form method="post" action="{% url 'add_to_cart' producto.id %}" class="mb-2">
+                    {% csrf_token %}
+                    <div class="input-group input-group-sm">
+                        <input type="number" name="quantity" min="1" value="1" class="form-control" style="max-width: 80px;" />
+                        <button type="submit" class="btn btn-success"><i class="bi bi-cart-plus"></i> Agregar</button>
+                    </div>
+                </form>
                 <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{ producto.id }}">
                     <i class="bi bi-images"></i> Ver galería
                 </button>

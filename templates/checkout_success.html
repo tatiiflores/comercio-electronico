@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Compra finalizada{% endblock %}
+{% block content %}
+<h2 class="mb-4">¡Compra exitosa!</h2>
+<p class="alert alert-success">Gracias por tu compra. Aquí está el resumen de tu pedido:</p>
+
+<h4>Datos de envío</h4>
+<ul class="list-group mb-4">
+    <li class="list-group-item"><strong>País:</strong> {{ checkout_data.pais }}</li>
+    <li class="list-group-item"><strong>Provincia:</strong> {{ checkout_data.provincia }}</li>
+    <li class="list-group-item"><strong>Ciudad:</strong> {{ checkout_data.ciudad }}</li>
+    <li class="list-group-item"><strong>Dirección:</strong> {{ checkout_data.direccion }}</li>
+</ul>
+
+<h4>Productos comprados</h4>
+<ul class="list-group mb-3">
+    {% for item in items %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ item.quantity }} x {{ item.producto.nombre }}
+        <span>${{ item.subtotal }}</span>
+    </li>
+    {% endfor %}
+</ul>
+
+<p class="lead">Total pagado: <strong>${{ total }}</strong></p>
+<a class="btn btn-primary" href="{% url 'productos' %}">Volver al catálogo</a>
+{% endblock %}

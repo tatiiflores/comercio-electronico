@@ -8,6 +8,12 @@ urlpatterns = [
     path('acercade/', views.acercade, name='acercade'),
     path('contacto/', views.contacto, name='contacto'),
     path('productos/', views.ProductoListView.as_view(), name='productos'),
+    path('carrito/', views.carrito, name='carrito'),
+    path('carrito/agregar/<int:producto_id>/', views.add_to_cart, name='add_to_cart'),
+    path('carrito/actualizar/<int:producto_id>/', views.update_cart, name='update_cart'),
+    path('carrito/eliminar/<int:producto_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('checkout/exito/', views.checkout_success, name='checkout_success'),
 
     # Autenticación
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
