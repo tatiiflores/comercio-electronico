@@ -18,6 +18,8 @@ urlpatterns = [
     # Autenticación
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
+    # --- NUEVO: Ruta para el registro ---
+    path('registro/', views.RegistroUsuario.as_view(), name='registro'), 
 
     # Gestión de clientes (protegidas)
     path('clientes/', views.ClienteListView.as_view(), name='cliente_list'),

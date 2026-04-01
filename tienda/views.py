@@ -7,6 +7,8 @@ from django.contrib import messages
 from decimal import Decimal
 from .models import Cliente, Proveedor, Producto, Venta, ImagenProducto
 from .forms import ClienteForm, ProveedorForm, ProductoForm, VentaForm, ImagenProductoFormSet, CheckoutForm
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 # Vistas públicas (Sprint 1 y 2)
 def index(request):
@@ -282,3 +284,14 @@ class VentaDetailView(LoginRequiredMixin, DetailView):
     model = Venta
     template_name = 'tienda/venta_detail.html'
     context_object_name = 'venta'
+
+# Vista de Registro de Usuarios
+class RegistroUsuario(CreateView):
+    model = User
+    form_class = UserCreationForm
+    template_name = 'registro.html' # Asegúrate de que este archivo esté en tu carpeta de templates
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        messages.success(self.request, "¡Cuenta creada con éxito! Ahora puedes iniciar sesión.")
+        return super().form_valid(form)

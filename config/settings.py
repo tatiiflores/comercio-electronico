@@ -1,14 +1,15 @@
 import os
 from pathlib import Path
 
+# 1. Rutas Básicas
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-tu-clave-secreta-aqui'  # Cambiar en producción
-
+# 2. Seguridad (Mantener en secreto en producción)
+SECRET_KEY = 'django-insecure-tu-clave-secreta-aqui'
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
+# 3. Aplicaciones del Proyecto
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -16,9 +17,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tienda',  # nuestra app
+    'tienda',  # Tu aplicación principal [cite: 37]
 ]
 
+# 4. Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -31,10 +33,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
+# 5. Plantillas y Procesadores de Contexto
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # carpeta global de templates
+        'DIRS': [BASE_DIR / 'templates'],  # Carpeta global de templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -42,7 +45,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'tienda.context_processors.cart_total_items',
+                'tienda.context_processors.cart_total_items', # Para el contador del carrito
             ],
         },
     },
@@ -50,6 +53,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+# 6. Base de Datos (SQLite por defecto para el proyecto)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -57,13 +61,13 @@ DATABASES = {
     }
 }
 
-AUTH_PASSWORD_VALIDATORS = [...]
-
-LANGUAGE_CODE = 'es-es'
+# 7. Internacionalización (Ajustado para Argentina)
+LANGUAGE_CODE = 'es-ar' # Cambiado a español Argentina
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_I18N = True
 USE_TZ = True
 
+# 8. Archivos Estáticos y Media
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
@@ -72,5 +76,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
+# 9. Configuración de Autenticación (CORREGIDO)
+# Usamos los 'name' definidos en urls.py
+LOGIN_URL = 'login' 
+LOGIN_REDIRECT_URL = 'index' 
+LOGOUT_REDIRECT_URL = 'login'
